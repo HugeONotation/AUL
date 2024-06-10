@@ -83,7 +83,7 @@ namespace aul {
         /// Extent.
         /// \param args List of std::array objects
         template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
-        explicit Multispan_impl(const std::array<typename std::remove_const<Args>::type, N> ...args):
+        Multispan_impl(const std::array<typename std::remove_const<Args>::type, N> ...args):
             it(args.data()...) {}
 
         Multispan_impl() = default;
@@ -333,7 +333,7 @@ namespace aul {
         /// \tparam N Length of std::array objects
         /// \param args List of std::array objects
         template<std::size_t N>
-        explicit Multispan_impl(std::array<typename std::remove_const<Args>::type, N>& ...args):
+        Multispan_impl(std::array<typename std::remove_const<Args>::type, N>& ...args):
             elem_count(N),
             it(args.data()...) {}
 
@@ -341,7 +341,7 @@ namespace aul {
         /// \tparam N Length of std::array objects
         /// \param args List of std::array objects
         template<std::size_t N>
-        explicit Multispan_impl(const std::array<typename std::remove_const<Args>::type, N>& ...args):
+        Multispan_impl(const std::array<typename std::remove_const<Args>::type, N>& ...args):
             elem_count(N),
             it(args.data()...) {}
 
@@ -587,7 +587,7 @@ namespace aul {
         /// \param arr std::array object to span over
         template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
         [[nodiscard]]
-        explicit Multispan_impl(std::array<element_type, N>& arr) noexcept:
+        Multispan_impl(std::array<element_type, N>& arr) noexcept:
             ptr(arr) {}
 
         ///
@@ -595,7 +595,7 @@ namespace aul {
         /// \param arr std::array object to span over
         template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
         [[nodiscard]]
-        explicit Multispan_impl(const std::array<typename std::remove_const<element_type>::type, N>& arr) noexcept:
+        Multispan_impl(const std::array<typename std::remove_const<element_type>::type, N>& arr) noexcept:
             ptr(arr) {}
 
         Multispan_impl() = default;
@@ -881,7 +881,7 @@ namespace aul {
         /// to Extent
         /// \param arr std::array object to span over
         template<std::size_t N>
-        explicit Multispan_impl(std::array<element_type, N>& arr) noexcept:
+        Multispan_impl(std::array<element_type, N>& arr) noexcept:
             elem_count(N),
             ptr(arr.data()) {}
 
@@ -889,7 +889,7 @@ namespace aul {
         /// \tparam N Length of std::array object. Should be less than Extent
         /// \param arr std::array object to span over
         template<std::size_t N>
-        explicit Multispan_impl(const std::array<typename std::remove_const<element_type>::type, N>& arr) noexcept:
+        Multispan_impl(const std::array<typename std::remove_const<element_type>::type, N>& arr) noexcept:
             elem_count(N),
             ptr(arr.data()) {}
 
