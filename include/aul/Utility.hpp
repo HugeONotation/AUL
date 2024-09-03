@@ -240,6 +240,66 @@ namespace aul {
     template<std::size_t N, class...Args>
     using nth_type_type = typename nth_type<N, Args...>::type;
 
+
+
+    ///
+    /// Has member alias type which is the smallest unsigned integral type
+    /// which is suited for indexing all elements of the specified array
+    /// type. This will be one of the following types:
+    /// unsigned char, unsigned short, unsigned int, unsigned long,
+    /// unsigned long long, std::size_t
+    ///
+    template<std::size_t Extent>
+    struct choose_smallest_size_type {
+        using type = typename std::conditional<
+            Extent < std::numeric_limits<unsigned char>::max(), unsigned char,
+            typename std::conditional<
+                Extent < std::numeric_limits<unsigned short>::max(), unsigned short,
+                typename std::conditional<
+                    Extent < std::numeric_limits<unsigned int>::max(), unsigned int,
+                    typename std::conditional<
+                        Extent < std::numeric_limits<unsigned long>::max(), unsigned long,
+                        typename std::conditional<
+                            Extent < std::numeric_limits<unsigned long long>::max(), unsigned long long, std::size_t
+                        >::type
+                    >::type
+                >::type
+            >::type
+        >::type;
+    };
+
+    template<std::size_t Extent>
+    using choose_smallest_size_type_t = typename choose_smallest_size_type<Extent>::type;
+
+    ///
+    /// Has member alias type which is the smallest signed integral type
+    /// which is suited for indexing all elements of the specified array
+    /// type. This will be one of the following types:
+    /// signed char, signed short, signed int, signed long,
+    /// signed long long, std::ptrdiff_t
+    ///
+    template<std::size_t Extent>
+    struct choose_smallest_difference_type {
+        using type = typename std::conditional<
+            Extent < std::numeric_limits<signed char>::max() / 2, signed char,
+            typename std::conditional<
+                Extent < std::numeric_limits<signed short>::max() / 2, signed short,
+                typename std::conditional<
+                    Extent < std::numeric_limits<signed int>::max() / 2, signed int,
+                    typename std::conditional<
+                        Extent < std::numeric_limits<signed long>::max() / 2, signed long,
+                        typename std::conditional<
+                            Extent < std::numeric_limits<signed long long>::max() / 2, signed long long, std::ptrdiff_t
+                        >::type
+                    >::type
+                >::type
+            >::type
+        >::type;
+    };
+
+    template<std::size_t Extent>
+    using choose_smallest_difference_type_t = typename choose_smallest_difference_type<Extent>::type;
+
 }
 
 #endif //AUL_UTILITY_HPP
