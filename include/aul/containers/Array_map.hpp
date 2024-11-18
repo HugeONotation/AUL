@@ -3,8 +3,8 @@
 
 #include "Zipper_iterator.hpp"
 #include "Allocator_aware_base.hpp"
-#include "../Span.hpp"
 
+#include "../Span.hpp"
 #include "../memory/Memory.hpp"
 #include "../Algorithms.hpp"
 
@@ -20,8 +20,8 @@
 namespace aul {
 
     ///
-    /// An associative container implemented using two separate arrays for keys
-    /// and values.
+    /// An associative container implemented using two parallel arrays
+    /// containing keys and values.
     ///
     /// \tparam K Key type
     /// \tparam V Element type
@@ -74,6 +74,7 @@ namespace aul {
         ///
         Array_map() noexcept(noexcept(A{})) = default;
 
+        /// Construct from comparator and optionally an allocator
         ///
         /// \param compare Comparator to use for element comparisons
         /// \param allocator Allocator object to copy
@@ -81,12 +82,13 @@ namespace aul {
             base{alloc},
             comparator{compare} {}
 
+        /// Construct with allocator
         ///
         /// \param allocator Allocator object to copy
-        ///
         explicit Array_map(const value_allocator_type& allocator):
             base{allocator} {}
 
+        /// Copy constructor
         ///
         /// If copying fails for any reason, the newly constructed Array_map
         /// in an empty state.
@@ -106,6 +108,7 @@ namespace aul {
             }
         }
 
+        /// Allocator-extended copy constructor
         ///
         /// \param arr Object to copy
         /// \param allocator Allocator to copy for copy of arr
@@ -457,10 +460,13 @@ namespace aul {
         ///
         /// Constructs element with an association with key
         ///
-        /// Provides the strong exception guarantee
+        /// Provides the strong exception guarantee.
+        ///
+        /// If key or any argument in args references the current content of the 
+        /// container, the behavior is undefined.
         ///
         /// \tparam Args Argument types to value constructor
-        /// \param key Reference ot key
+        /// \param key Reference to key
         /// \param args Arguments to value constructor
         /// \return Pair containing iterator to element and boolean indicating
         ///     whether a new element was added
@@ -566,6 +572,9 @@ namespace aul {
         ///
         /// Provides the strong exception guarantee
         ///
+        /// If key or any argument in args references the current content of the 
+        /// container, the behavior is undefined.
+        ///
         /// \tparam Args Argument types to value constructor
         /// \param key Rvalue reference ot key
         /// \param args Arguments to value constructor
@@ -669,6 +678,9 @@ namespace aul {
 
         ///
         /// If an element is associated with the specified key,
+        ///
+        /// If key or any argument in args references the current content of the 
+        /// container, the behavior is undefined.
         ///
         /// \tparam Args Argument types to value constructor
         /// \param key Const reference to key
@@ -777,6 +789,9 @@ namespace aul {
         ///
         /// If an element is associated with the specified key, constructs a
         /// temporary which is move assigned to the previously mapped element.
+        ///
+        /// If key or any argument in args references the current content of the 
+        /// container, the behavior is undefined.
         ///
         /// \tparam Args Argument types to value constructor
         /// \param key Const reference to key
@@ -1453,6 +1468,13 @@ namespace aul {
         }
 
     };
+
+    #if __cplusplus >= 201703L
+
+    template<class T>
+
+
+    #endif
 
 }
 
