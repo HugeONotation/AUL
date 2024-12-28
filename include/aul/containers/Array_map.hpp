@@ -1471,8 +1471,7 @@ namespace aul {
 
     #if __cplusplus >= 201703L
 
-    template<class T>
-
+    //TODO: Add deduction guidelines
 
     #endif
 
