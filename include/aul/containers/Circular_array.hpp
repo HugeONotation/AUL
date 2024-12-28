@@ -260,7 +260,7 @@ namespace aul {
         /// object as its allocator.
         ///
         /// \param allocator Allocator to copy for internal use
-        explicit Circular_array(allocator_type& a):
+        explicit Circular_array(const allocator_type& a):
             base(a) {}
 
         ///
