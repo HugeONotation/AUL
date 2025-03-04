@@ -64,7 +64,9 @@ namespace aul {
         //=================================================
 
         void swap(Stateful_allocator_container_base& rhs) {
-            std::swap(allocator, rhs.allocator);
+            if constexpr (std::allocator_traits<A>::propagate_on_container_move_assignment::value) {
+                std::swap(allocator, rhs.allocator);
+            }
         }
 
         //=================================================
