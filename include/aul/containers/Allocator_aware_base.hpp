@@ -10,6 +10,16 @@ namespace aul {
     protected:
 
         //=================================================
+        // Type aliases
+        //=================================================
+
+        using alloc_traits = typename std::allocator_traits<A>;
+
+        using size_type = typename alloc_traits::size_type;
+
+        using pointer = typename alloc_traits::pointer;
+
+        //=================================================
         // -ctors
         //=================================================
 
@@ -52,6 +62,32 @@ namespace aul {
         }
 
         //=================================================
+        // Allocation methods
+        //=================================================
+
+        pointer allocate(size_type n) {
+            return alloc_traits::allocate(allocator, n);
+        }
+
+        void deallocate(pointer p, size_type n) {
+            return alloc_traits::deallocate(allocator, p, n);
+        }
+
+        //=================================================
+        // Construction methods
+        //=================================================
+
+        template<class T, class...Args>
+        void construct(T* p, Args&&...args) {
+            alloc_traits::construct(allocator, p, std::forward<Args>(args)...);
+        }
+
+        template<class T>
+        void destroy(T* p) {
+            alloc_traits::destroy(allocator, p);
+        }
+
+        //=================================================
         // Accessors
         //=================================================
 
@@ -77,9 +113,23 @@ namespace aul {
 
     };
 
+
+
+
+
     template<class A>
     struct Empty_allocator_container_base {
     protected:
+
+        //=================================================
+        // Type aliases
+        //=================================================
+
+        using alloc_traits = typename std::allocator_traits<A>;
+
+        using size_type = typename alloc_traits::size_type;
+
+        using pointer = typename alloc_traits::pointer;
 
         //=================================================
         // -ctors
@@ -110,6 +160,36 @@ namespace aul {
         }
 
         //=================================================
+        // Allocation methods
+        //=================================================
+
+        pointer allocate(size_type n) {
+            A allocator{};
+            return alloc_traits::allocate(allocator, n);
+        }
+
+        void deallocate(pointer p, size_type n) {
+            A allocator{};
+            return alloc_traits::deallocate(allocator, p, n);
+        }
+
+        //=================================================
+        // Construction methods
+        //=================================================
+
+        template<class T, class...Args>
+        void construct(T* p, Args&&...args) {
+            A allocator{};
+            alloc_traits::construct(allocator, p, std::forward<Args>(args)...);
+        }
+
+        template<class T>
+        void destroy(T* p) {
+            A allocator{};
+            alloc_traits::destroy(allocator, p);
+        }
+
+        //=================================================
         // Accessors
         //=================================================
 
@@ -125,6 +205,10 @@ namespace aul {
 
     };
 
+
+
+
+
     template<class A>
     struct Allocator_aware_base : public std::conditional_t<
         std::allocator_traits<A>::is_always_equal::value,
@@ -139,6 +223,12 @@ namespace aul {
         >;
 
         using base::base;
+
+        using base::allocate;
+        using base::deallocate;
+
+        using base::construct;
+        using base::destroy;
 
     };
 
