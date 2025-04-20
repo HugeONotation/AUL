@@ -24,7 +24,10 @@ namespace aul {
         //=================================================
 
         explicit Stateful_allocator_container_base(const A& a):
-            allocator(a) {}
+        allocator(a) {}
+
+        explicit Stateful_allocator_container_base(A&& a):
+            allocator(std::forward<A&&>(a)) {}
 
         Stateful_allocator_container_base() = default;
         ~Stateful_allocator_container_base() = default;
@@ -136,6 +139,8 @@ namespace aul {
         //=================================================
 
         explicit Empty_allocator_container_base(const A& a) {};
+
+        explicit Empty_allocator_container_base(A&& a) {};
 
         Empty_allocator_container_base() = default;
         ~Empty_allocator_container_base() = default;
