@@ -1139,8 +1139,10 @@ namespace aul {
         /// allocation.
         [[nodiscard]]
         bool is_segmented() const {
-            auto s = static_cast<difference_type>(size());
-            return s > (capacity() - head_offset);
+            //TODO: Reconsider this logic
+            auto t0 = static_cast<difference_type>(size());
+            auto t1 = static_cast<difference_type>(capacity() - head_offset);
+            return t0 > t1;
         }
 
         /*
