@@ -303,7 +303,7 @@ namespace aul {
         using difference_type = std::ptrdiff_t;
 
         using pointer = std::tuple<Args*...>;
-        using const_pointer = std::tuple<const Args*...>;;
+        using const_pointer = std::tuple<const Args*...>;
 
         using reference = typename std::iterator_traits<iterator>::reference;
         using const_reference = typename std::iterator_traits<iterator>::reference;
