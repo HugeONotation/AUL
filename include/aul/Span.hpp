@@ -588,7 +588,7 @@ namespace aul {
         template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
         [[nodiscard]]
         Multispan_impl(std::array<element_type, N>& arr) noexcept:
-            ptr(arr) {}
+            ptr(arr.data()) {}
 
         ///
         /// \tparam N Length of std::array object. Should be less than Extent
@@ -596,7 +596,7 @@ namespace aul {
         template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
         [[nodiscard]]
         Multispan_impl(const std::array<element_type, N>& arr) noexcept:
-            ptr(arr) {}
+            ptr(arr.data()) {}
 
         Multispan_impl() = default;
         Multispan_impl(const Multispan_impl&) = default;
