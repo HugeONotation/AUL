@@ -572,6 +572,7 @@ namespace aul {
         explicit Multispan_impl(It first):
             ptr(std::addressof(*first)) {}
 
+
         ///
         /// \tparam N Length of primitive array. Should be less than or equal to
         /// Extent
@@ -1082,8 +1083,32 @@ namespace aul {
     /// aul::dynamic_extent
     template<class T, std::size_t Extent = dynamic_extent>
     class Span : public Multispan_impl<Extent, T> {
+    public:
 
         using Multispan_impl<Extent, T>::Multispan_impl;
+
+        Span(aul::Multispan_impl<Extent, T> other):
+            Multispan_impl<Extent, T>(other) {}
+
+    };
+
+    ///
+    /// A class which provides a non-owning view over a range of contiguously
+    /// allocated objects.
+    ///
+    /// \tparam T Type of objects to views
+    template<class T>
+    class Span<T, aul::dynamic_extent> : public Multispan_impl<aul::dynamic_extent, T> {
+    public:
+
+        using Multispan_impl<aul::dynamic_extent, T>::Multispan_impl;
+
+        Span(aul::Multispan_impl<aul::dynamic_extent, T> other):
+            Multispan_impl<aul::dynamic_extent, T>(other) {}
+
+        template<std::size_t Extent2>
+        Span(aul::Multispan_impl<Extent2, T> other):
+            Multispan_impl<aul::dynamic_extent, T>(other) {}
 
     };
 
@@ -1096,6 +1121,7 @@ namespace aul {
     /// \tparam Args Types of objects in ranges to view.
     template<std::size_t Extent, class...Args>
     class Fixed_multispan : public Multispan_impl<Extent, Args...> {
+    public:
 
         using Multispan_impl<Extent, Args...>::Multispan_impl;
 
@@ -1108,6 +1134,7 @@ namespace aul {
     /// \tparam Args Types of objects in ranges to view.
     template<class...Args>
     class Multispan : public Multispan_impl<dynamic_extent, Args...> {
+    public:
 
         using Multispan_impl<dynamic_extent, Args...>::Multispan_impl;
 
@@ -1145,6 +1172,8 @@ namespace aul {
     template<class T, std::size_t N>
     Span(const std::array<T, N>& arr) -> Span<T, N>;
 
+    template<class T, std::size_t N>
+    Span(aul::Multispan_impl<N, T>) -> Span<T, N>;
 
 
     template<class...Its>
@@ -1155,6 +1184,9 @@ namespace aul {
 
     template<std::size_t N, class...Args>
     Multispan(const std::array<Args, N>...) -> Multispan<Args...>;
+
+    template<class...Args>
+    Multispan(aul::Multispan<Args...>) -> Multispan<Args...>;
 
     #endif
 
