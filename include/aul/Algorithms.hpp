@@ -7,6 +7,9 @@
 #include <functional>
 #include <memory>
 
+//TODO: Remove use of this header
+#include <algorithm>
+
 namespace aul {
 
     ///
@@ -140,6 +143,42 @@ namespace aul {
 
     template<class...Args>
     void no_op(const Args&...) {}
+
+    template<class Fwd_it>
+    Fwd_it shift_left(
+        Fwd_it first,
+        Fwd_it last,
+        typename std::iterator_traits<Fwd_it>::difference_type n
+    ) {
+        if (n == 0 || n >= std::distance(last, first)) {
+            return last;
+        }
+
+        auto input_first = first;
+        std::advance(first, n);
+
+        return std::move(input_first, last, first);
+    }
+
+    template<class Fwd_it>
+    Fwd_it shift_right(
+        Fwd_it first,
+        Fwd_it last,
+        typename std::iterator_traits<Fwd_it>::difference_type n
+    ) {
+        if (n == 0 || n >= std::distance(last, first)) {
+            return last;
+        }
+
+        auto input_end = last;
+        std::advance(input_end);
+
+        return std::move_backward(
+            first,
+            input_end,
+            last
+        );
+    }
 
 }
 
