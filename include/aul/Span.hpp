@@ -76,15 +76,51 @@ namespace aul {
         /// \param args List of primitive arrays
         template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
         explicit Multispan_impl(Args (&...args)[N]):
-            it(args...) {}
+        it(args...) {}
 
         ///
-        /// \tparam N Length of std::array. Should be less then or equal to
+        /// \tparam N Length of std::array. Should be less taen or equal to
         /// Extent.
         /// \param args List of std::array objects
-        template<std::size_t N, class = typename std::enable_if<Extent <= N>::type>
-        Multispan_impl(const std::array<typename std::remove_const<Args>::type, N> ...args):
-            it(args.data()...) {}
+        template<std::size_t N, class...Args2>
+        Multispan_impl(std::array<Args2, N> ...args):
+            it(args.data()...)
+        {
+            typename std::enable_if<Extent <= N>::type dummy0{};
+            typename std::enable_if<sizeof...(Args) == sizeof...(Args2)>::type dummy1{};
+
+            //TODO: Implement
+            /*
+            using V = typename std::remove_pointer<decltype(std::data(args))>::type;
+
+            static_assert(
+                std::is_convertible<V(*)[], element_type(*)[]>::value,
+                "Type of array must be convertible to U"
+            );
+            */
+        }
+
+        ///
+        /// \tparam N Length of std::array. Should be less taen or equal to
+        /// Extent.
+        /// \param args List of std::array objects
+        template<std::size_t N, class...Args2>
+        Multispan_impl(const std::array<Args2, N> ...args):
+            it(args.data()...)
+        {
+            typename std::enable_if<Extent <= N>::type dummy0{};
+            typename std::enable_if<sizeof...(Args) == sizeof...(Args2)>::type dummy1{};
+
+            //TODO: Implement
+            /*
+            using V = typename std::remove_pointer<decltype(std::data(args))>::type;
+
+            static_assert(
+                std::is_convertible<V(*)[], element_type(*)[]>::value,
+                "Type of array must be convertible to U"
+            );
+            */
+        }
 
         Multispan_impl() = default;
         Multispan_impl(const Multispan_impl&) = default;
@@ -874,7 +910,9 @@ namespace aul {
         template<std::size_t N>
         explicit Multispan_impl(element_type (&arr)[N]) noexcept:
             elem_count(N),
-            ptr(arr) {}
+            ptr(arr) {
+
+        }
 
         ///
         /// \tparam N Length of std::array object. Should be less than or equal
@@ -883,15 +921,31 @@ namespace aul {
         template<std::size_t N>
         Multispan_impl(std::array<element_type, N>& arr) noexcept:
             elem_count(N),
-            ptr(arr.data()) {}
+            ptr(arr.data())
+        {
+            using V = typename std::remove_pointer<decltype(std::data(arr))>::type;
+
+            static_assert(
+                std::is_convertible<V(*)[], element_type(*)[]>::value,
+                "Type of array must be convertible to U"
+            );
+        }
 
         ///
         /// \tparam N Length of std::array object. Should be less than Extent
         /// \param arr std::array object to span over
-        template<std::size_t N>
-        Multispan_impl(const std::array<element_type, N>& arr) noexcept:
+        template<std::size_t N, class U>
+        Multispan_impl(const std::array<U, N>& arr) noexcept:
             elem_count(N),
-            ptr(arr.data()) {}
+            ptr(arr.data())
+        {
+            using V = typename std::remove_pointer<decltype(std::data(arr))>::type;
+
+            static_assert(
+                std::is_convertible<V(*)[], element_type(*)[]>::value,
+                "Type of array must be convertible to U"
+            );
+        }
 
         ///
         /// \tparam N Number of elements in fixed-width span
