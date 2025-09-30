@@ -1036,7 +1036,7 @@ namespace aul {
             std::swap(comparator, rhs.comparator);
         }
 
-        friend void swap(Array_map& lhs, Array_map& rhs) noexcept(noexcept(lhs.swap)) {
+        friend void swap(Array_map& lhs, Array_map& rhs) noexcept(noexcept(lhs.swap(rhs))) {
             lhs.swap(rhs);
         }
 

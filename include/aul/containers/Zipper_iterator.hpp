@@ -129,11 +129,11 @@ namespace aul {
         //=================================================
 
         bool operator==(const Forward_zipper_iterator& rhs) const {
-            return (it == rhs.it0) && (its == rhs.its);
+            return (it == rhs.it) && (its == rhs.its);
         }
 
         bool operator!=(const Forward_zipper_iterator& rhs) const {
-            return (it != rhs.it0) || (its != rhs.its);
+            return (it != rhs.it) || (its != rhs.its);
         }
 
         //=================================================
